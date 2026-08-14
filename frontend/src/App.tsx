@@ -4,6 +4,9 @@ import { fetchDashboard } from "./api/dashboardApi";
 import HabitCard from "./components/HabitCard";
 import HabitLogForm from "./components/HabitLogForm";
 import type { DashboardData } from "./types/dashboard";
+import EmptyState from "./components/EmptyState";
+import ErrorState from "./components/ErrorState";
+import LoadingState from "./components/LoadingState";
 
 const DEMO_USER_ID = "6a7eaf664cef4e31024fd090";
 
@@ -65,17 +68,9 @@ function App() {
         </div>
       </header>
 
-      {isLoading && (
-        <section className="dashboard-placeholder">
-          <p>Loading your habits...</p>
-        </section>
-      )}
+      {isLoading && <LoadingState message="Loading your habits..." />}
 
-      {error && (
-        <section className="dashboard-placeholder">
-          <p>{error}</p>
-        </section>
-      )}
+      {error && <ErrorState message={error} onRetry={loadDashboard} />}
 
       {dashboard && !isLoading && !error && (
         <>
@@ -86,11 +81,18 @@ function App() {
               <p>You are tracking {dashboard.habits.length} habits.</p>
             </div>
 
-            <div className="habit-grid">
-              {dashboard.habits.map((habit) => (
-                <HabitCard key={habit.habitType} habit={habit} />
-              ))}
-            </div>
+            {dashboard.habits.length === 0 ? (
+              <EmptyState
+                title="No habits yet"
+                message="Start by logging your first habit."
+              />
+            ) : (
+              <div className="habit-grid">
+                {dashboard.habits.map((habit) => (
+                  <HabitCard key={habit.habitType} habit={habit} />
+                ))}
+              </div>
+            )}
           </section>
 
           <HabitLogForm userId={DEMO_USER_ID} onLogCreated={loadDashboard} />

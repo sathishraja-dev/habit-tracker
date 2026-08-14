@@ -217,3 +217,35 @@
 .recent-logs li span {
   color: #777;
 }
+.status-card {
+  padding: 32px;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+}
+
+.status-card h2 {
+  margin-top: 0;
+}
+
+.status-card p {
+  margin: 0;
+  color: #666;
+}
+
+.status-error {
+  border-color: #e0b4b4;
+}
+
+.status-card button {
+  margin-top: 16px;
+  min-height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: #1f1f1f;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
