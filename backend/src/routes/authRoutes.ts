@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { signupController } from "../controllers/authController.js";
+import {
+  signupController,
+  loginController,
+} from "../controllers/authController.js";
+import { validateBody } from "../middleware/validate.js";
+import { signupSchema } from "../validators/authValidator.js";
+import { loginSchema } from "../validators/authLoginValidator.js";
 
 const router = Router();
 
@@ -10,6 +16,8 @@ const router = Router();
  * keeping route definitions focused on mapping HTTP methods and URLs to
  * their corresponding controllers.
  */
-router.post("/signup", signupController);
+router.post("/signup", validateBody(signupSchema), signupController);
+
+router.post("/login", validateBody(loginSchema), loginController);
 
 export default router;

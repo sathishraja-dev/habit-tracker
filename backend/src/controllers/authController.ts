@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { signup } from "../services/authService.js";
 import { signupSchema } from "../validators/authValidator.js";
+import { login } from "../services/loginService.js";
 
 /**
  * Handles HTTP requests for user registration.
@@ -54,6 +55,46 @@ export async function signupController(
       success: false,
       error: {
         message: "Unable to create account",
+      },
+    });
+  }
+}
+
+/**
+ * Authenticates an existing user and returns a signed JWT.
+ *
+ * Request validation is performed before this controller receives the
+ * credentials, keeping authentication logic inside the service layer.
+ */
+export async function loginController(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  try {
+    const result = await login(req.body);
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "INVALID_CREDENTIALS") {
+      res.status(401).json({
+        success: false,
+        error: {
+          message: "Invalid email or password",
+        },
+      });
+
+      return;
+    }
+
+    console.error("Login failed", error);
+
+    res.status(500).json({
+      success: false,
+      error: {
+        message: "Internal server error",
       },
     });
   }
