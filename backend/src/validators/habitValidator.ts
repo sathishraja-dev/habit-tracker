@@ -7,10 +7,10 @@ import { HABIT_TYPES } from "../models/HabitLog.js";
  * Validation is performed at the API boundary so invalid requests are
  * rejected before they reach the controller, service, or database layer.
  */
-export const createHabitLogSchema = z.object({
-  userId: z.string().regex(/^[a-f\d]{24}$/i, "Invalid userId"),
+export const createHabitLogSchema = z
+  .object({
+    habitType: z.enum(HABIT_TYPES),
 
-  habitType: z.enum(HABIT_TYPES),
-
-  value: z.number().nonnegative("Value cannot be negative"),
-});
+    value: z.number().nonnegative("Value cannot be negative"),
+  })
+  .strict();

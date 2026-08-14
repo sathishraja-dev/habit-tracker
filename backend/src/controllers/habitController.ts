@@ -5,8 +5,8 @@ import { createHabitLogSchema } from "../validators/habitValidator.js";
 /**
  * Handles HTTP requests for logging a daily habit.
  *
- * The controller validates incoming data, delegates business logic to the
- * service layer, and converts the result into an HTTP response.
+ * The authenticated user's ID comes from the verified JWT rather than
+ * from client-supplied request data.
  */
 export async function createHabitLog(
   req: Request,
@@ -24,8 +24,13 @@ export async function createHabitLog(
     return;
   }
 
+  const userId = req.user!.userId;
+
   try {
-    const log = await logHabit(result.data);
+    const log = await logHabit({
+      userId,
+      ...result.data,
+    });
 
     res.status(201).json({
       success: true,
