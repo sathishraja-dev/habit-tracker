@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import habitRoutes from "./routes/habitRoutes.js";
 
 /**
  * Creates and configures the Express application.
@@ -13,6 +14,8 @@ export function createApp() {
 
   app.use(cors());
   app.use(express.json());
+
+  app.use("/api", habitRoutes);
 
   return app;
 }
