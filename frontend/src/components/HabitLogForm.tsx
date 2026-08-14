@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createHabitLog } from "../api/habitApi";
 import type { HabitType } from "../types/dashboard";
+import { HABIT_CONFIG } from "../types/habitConfig";
 
 interface HabitLogFormProps {
   userId: string;
@@ -15,6 +16,7 @@ interface HabitLogFormProps {
  */
 function HabitLogForm({ userId, onLogCreated }: HabitLogFormProps) {
   const [habitType, setHabitType] = useState<HabitType>("water");
+  const selectedHabit = HABIT_CONFIG[habitType];
 
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
 
@@ -95,7 +97,7 @@ function HabitLogForm({ userId, onLogCreated }: HabitLogFormProps) {
         </label>
 
         <label>
-          Value
+          Value ({selectedHabit.unit})
           <input
             type="number"
             min="0"

@@ -1,4 +1,5 @@
 import type { DashboardHabit } from "../types/dashboard";
+import { HABIT_CONFIG } from "../types/habitConfig";
 
 interface HabitCardProps {
   habit: DashboardHabit;
@@ -13,7 +14,7 @@ interface HabitCardProps {
 function HabitCard({ habit }: HabitCardProps) {
   const { habitType, currentStreak, weeklyProgress, logs } = habit;
 
-  const habitName = habitType.charAt(0).toUpperCase() + habitType.slice(1);
+  const habitConfig = HABIT_CONFIG[habitType];
 
   const progressWidth = `${weeklyProgress.percentage}%`;
 
@@ -23,7 +24,7 @@ function HabitCard({ habit }: HabitCardProps) {
         <div>
           <p className="habit-card-label">Habit</p>
 
-          <h2>{habitName}</h2>
+          <h2>{habitConfig.label}</h2>
         </div>
 
         <strong>{weeklyProgress.percentage}%</strong>
@@ -54,7 +55,9 @@ function HabitCard({ habit }: HabitCardProps) {
               <li key={log.date}>
                 <span>{log.date}</span>
 
-                <strong>{log.value}</strong>
+                <strong>
+                  {log.value} {habitConfig.unit}
+                </strong>
               </li>
             ))}
           </ul>
