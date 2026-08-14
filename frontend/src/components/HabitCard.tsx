@@ -5,13 +5,13 @@ interface HabitCardProps {
 }
 
 /**
- * Displays the progress and streak information for one habit.
+ * Displays the progress, streak, and recent log values for one habit.
  *
- * The component receives a DashboardHabit through props so the same
- * component can render water, sleep, and exercise without duplicating UI.
+ * The component is reusable for every supported habit type because
+ * all habit-specific information comes from the DashboardHabit prop.
  */
 function HabitCard({ habit }: HabitCardProps) {
-  const { habitType, currentStreak, weeklyProgress } = habit;
+  const { habitType, currentStreak, weeklyProgress, logs } = habit;
 
   const habitName = habitType.charAt(0).toUpperCase() + habitType.slice(1);
 
@@ -22,6 +22,7 @@ function HabitCard({ habit }: HabitCardProps) {
       <div className="habit-card-header">
         <div>
           <p className="habit-card-label">Habit</p>
+
           <h2>{habitName}</h2>
         </div>
 
@@ -43,6 +44,22 @@ function HabitCard({ habit }: HabitCardProps) {
 
         <span>🔥 {currentStreak} day streak</span>
       </div>
+
+      {logs.length > 0 && (
+        <div className="recent-logs">
+          <h3>Recent activity</h3>
+
+          <ul>
+            {logs.slice(0, 3).map((log) => (
+              <li key={log.date}>
+                <span>{log.date}</span>
+
+                <strong>{log.value}</strong>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </article>
   );
 }

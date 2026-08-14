@@ -186,3 +186,34 @@
     grid-template-columns: 1fr;
   }
 }
+
+.recent-logs {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.recent-logs h3 {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+}
+
+.recent-logs ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recent-logs li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.85rem;
+}
+
+.recent-logs li span {
+  color: #777;
+}
