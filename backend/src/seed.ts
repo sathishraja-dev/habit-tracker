@@ -1,4 +1,5 @@
 import "dotenv/config";
+import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import { connectToDatabase } from "./db.js";
 import { User } from "./models/User.js";
@@ -17,8 +18,12 @@ async function seed(): Promise<void> {
   await HabitLog.deleteMany({});
   await User.deleteMany({});
 
+  const passwordHash = await bcrypt.hash("DemoPassword123!", 12);
+
   const user = await User.create({
     name: "Demo User",
+    email: "demo@example.com",
+    passwordHash,
   });
 
   const logs: Array<{
@@ -129,6 +134,8 @@ async function seed(): Promise<void> {
 
   console.log("Seed completed successfully");
   console.log(`Demo user ID: ${user._id}`);
+  console.log("Demo user email: demo@example.com");
+  console.log("Demo user password: DemoPassword123!");
 
   await mongoose.disconnect();
 }
