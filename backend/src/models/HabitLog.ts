@@ -12,7 +12,7 @@ export const HABIT_TYPES = ["sleep", "exercise", "water"] as const;
 export type HabitType = (typeof HABIT_TYPES)[number];
 
 export interface IHabitLog extends Document {
-  userID: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
   habitType: HabitType;
   date: string;
   value: number;
@@ -20,7 +20,7 @@ export interface IHabitLog extends Document {
 
 const habitLogSchema = new Schema<IHabitLog>(
   {
-    userID: {
+    userId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User",
