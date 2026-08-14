@@ -1,122 +1,85 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+import { fetchDashboard } from "./api/dashboardApi";
+import type { DashboardData } from "./types/dashboard";
 
+const DEMO_USER_ID = "6a7eaf664cef4e31024fd090";
+
+/**
+ * Root component for the Habit Tracker dashboard.
+ *
+ * The component loads dashboard data from the backend when it mounts
+ * and keeps the API state separate from the presentation logic.
+ */
 function App() {
-  const [count, setCount] = useState(0)
+  const [dashboard, setDashboard] = useState<DashboardData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    /**
+     * Loads dashboard data for the configured demo user.
+     *
+     * Keeping the asynchronous operation inside this function makes the
+     * effect responsible only for triggering the initial data request.
+     */
+    async function loadDashboard() {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const response = await fetchDashboard(DEMO_USER_ID);
+
+        if (!response.success) {
+          throw new Error("Dashboard request was unsuccessful");
+        }
+
+        setDashboard(response.data);
+      } catch (requestError) {
+        console.error("Failed to load dashboard", requestError);
+
+        setError("Unable to load your dashboard.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    void loadDashboard();
+  }, []);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+    <main className="app">
+      <header className="app-header">
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
+          <p className="app-eyebrow">Habit Tracker</p>
+          <h1>Your Dashboard</h1>
+          <p className="app-description">
+            Track your habits, progress, and current streaks.
           </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
+      {isLoading && (
+        <section className="dashboard-placeholder">
+          <p>Loading your habits...</p>
+        </section>
+      )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      {error && (
+        <section className="dashboard-placeholder">
+          <p>{error}</p>
+        </section>
+      )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {dashboard && !isLoading && !error && (
+        <section className="dashboard-placeholder">
+          <h2>Welcome, {dashboard.user.name}</h2>
+
+          <p>You are tracking {dashboard.habits.length} habits.</p>
+        </section>
+      )}
+    </main>
+  );
 }
 
-export default App
+export default App;
