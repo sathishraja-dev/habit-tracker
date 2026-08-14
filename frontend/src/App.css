@@ -41,3 +41,148 @@
 .dashboard-placeholder h2 {
   margin-top: 0;
 }
+
+.dashboard-intro {
+  margin-bottom: 24px;
+}
+
+.dashboard-intro h2 {
+  margin: 0;
+}
+
+.dashboard-intro p {
+  margin: 8px 0 0;
+  color: #666;
+}
+
+.habit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.habit-card {
+  padding: 24px;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.habit-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.habit-card-label {
+  margin: 0 0 4px;
+  color: #777;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.habit-card h2 {
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.habit-card-header strong {
+  font-size: 1.5rem;
+}
+
+.progress-track {
+  height: 10px;
+  margin: 24px 0 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e8e8e8;
+}
+
+.progress-value {
+  height: 100%;
+  border-radius: inherit;
+  background: #1f1f1f;
+  transition: width 300ms ease;
+}
+
+.habit-card-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 800px) {
+  .habit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.log-form {
+  margin-top: 32px;
+  padding: 24px;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.log-form h2 {
+  margin: 0;
+}
+
+.log-form form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) auto;
+  align-items: end;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.log-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.log-form input,
+.log-form select {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.log-form button {
+  min-height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: #1f1f1f;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.log-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-error {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #c62828;
+}
+
+@media (max-width: 800px) {
+  .log-form form {
+    grid-template-columns: 1fr;
+  }
+}
