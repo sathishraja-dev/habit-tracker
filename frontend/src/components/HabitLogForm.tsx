@@ -4,17 +4,16 @@ import type { HabitType } from "../types/dashboard";
 import { HABIT_CONFIG } from "../types/habitConfig";
 
 interface HabitLogFormProps {
-  userId: string;
+  token: string;
   onLogCreated: () => Promise<void>;
 }
-
 /**
  * Provides the UI for creating a new habit log.
  *
  * The component handles form state and user interaction while the API
  * module handles communication with the backend.
  */
-function HabitLogForm({ userId, onLogCreated }: HabitLogFormProps) {
+function HabitLogForm({ token, onLogCreated }: HabitLogFormProps) {
   const [habitType, setHabitType] = useState<HabitType>("water");
   const selectedHabit = HABIT_CONFIG[habitType];
 
@@ -44,10 +43,8 @@ function HabitLogForm({ userId, onLogCreated }: HabitLogFormProps) {
       setIsSubmitting(true);
       setError(null);
 
-      await createHabitLog({
-        userId,
+      await createHabitLog(token, {
         habitType,
-        date,
         value: numericValue,
       });
 

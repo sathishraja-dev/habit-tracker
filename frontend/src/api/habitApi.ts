@@ -3,9 +3,7 @@ import type { HabitType } from "../types/dashboard";
 const API_BASE_URL = "http://localhost:3000";
 
 export interface CreateHabitLogRequest {
-  userId: string;
   habitType: HabitType;
-  date: string;
   value: number;
 }
 
@@ -21,19 +19,19 @@ export interface CreateHabitLogResponse {
 }
 
 /**
- * Sends a new habit log to the backend.
+ * Sends a habit log for the authenticated user.
  *
- * The API client owns the HTTP request so UI components only need to
- * provide the habit data and don't need to know the backend URL or
- * request configuration.
+ * User identity is established by the JWT rather than request-body data.
  */
 export async function createHabitLog(
+  token: string,
   log: CreateHabitLogRequest,
 ): Promise<CreateHabitLogResponse> {
   const response = await fetch(`${API_BASE_URL}/api/logs`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(log),
   });

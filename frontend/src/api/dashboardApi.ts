@@ -3,15 +3,19 @@ import type { DashboardResponse } from "../types/dashboard";
 const API_BASE_URL = "http://localhost:3000";
 
 /**
- * Fetches dashboard data for a user from the backend API.
+ * Fetches the authenticated user's dashboard.
  *
- * Keeping HTTP communication in a dedicated API module prevents React
- * components from becoming responsible for networking details.
+ * The backend identifies the user from the JWT rather than from a
+ * client-supplied user ID.
  */
 export async function fetchDashboard(
-  userId: string,
+  token: string,
 ): Promise<DashboardResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/dashboard/${userId}`);
+  const response = await fetch(`${API_BASE_URL}/api/dashboard`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch dashboard");
