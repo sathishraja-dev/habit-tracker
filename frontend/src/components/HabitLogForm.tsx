@@ -45,6 +45,7 @@ function HabitLogForm({ token, onLogCreated }: HabitLogFormProps) {
 
       await createHabitLog(token, {
         habitType,
+        date,
         value: numericValue,
       });
 

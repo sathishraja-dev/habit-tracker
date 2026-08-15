@@ -51,7 +51,7 @@ function HabitCard({ habit }: HabitCardProps) {
           <h3>Recent activity</h3>
 
           <ul>
-            {logs.slice(0, 3).map((log) => (
+            {logs.map((log) => (
               <li key={log.date}>
                 <span>{log.date}</span>
 

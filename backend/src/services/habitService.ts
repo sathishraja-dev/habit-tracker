@@ -1,18 +1,19 @@
-import { HabitLog, type HabitType } from "../models/HabitLog";
+import { HabitLog, type HabitType } from "../models/HabitLog.js";
 import mongoose from "mongoose";
 import { User } from "../models/User.js";
 
 interface LogHabitInput {
   userId: string;
   habitType: HabitType;
+  date: string;
   value: number;
 }
 
 /**
- * Creates or updates a user's habit log for today.
+ * Creates or updates a user's habit log for the selected calendar date.
  *
- * The service validates the referenced user before writing the habit log,
- * ensuring that every habit record belongs to an existing user.
+ * The authenticated user ID comes from the JWT, while the date and habit
+ * values come from the validated request body.
  */
 export async function logHabit(input: LogHabitInput) {
   const userObjectId = new mongoose.Types.ObjectId(input.userId);
@@ -27,22 +28,20 @@ export async function logHabit(input: LogHabitInput) {
     throw error;
   }
 
-  const today = new Date().toISOString().slice(0, 10);
-
   const log = await HabitLog.findOneAndUpdate(
     {
       userId: userObjectId,
       habitType: input.habitType,
-      date: today,
+      date: input.date,
     },
     {
       userId: userObjectId,
       habitType: input.habitType,
-      date: today,
+      date: input.date,
       value: input.value,
     },
     {
-      new: true,
+      returnDocument: "after",
       upsert: true,
       runValidators: true,
     },

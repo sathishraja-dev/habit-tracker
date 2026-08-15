@@ -11,6 +11,8 @@ export const createHabitLogSchema = z
   .object({
     habitType: z.enum(HABIT_TYPES),
 
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date"),
+
     value: z.number().nonnegative("Value cannot be negative"),
   })
   .strict();
