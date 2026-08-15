@@ -2,13 +2,19 @@ import type { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../utils/jwt.js";
 
 /**
+ * Adds authenticated user information to Express requests.
+ */
+export interface AuthenticatedRequest extends Request {
+  user: {
+    userId: string;
+  };
+}
+
+/**
  * Verifies the JWT supplied in the Authorization header.
  *
  * Expected format:
  * Authorization: Bearer <token>
- *
- * The authenticated user ID is attached to the request so downstream
- * controllers do not need to trust a user ID supplied by the client.
  */
 export function requireAuth(
   req: Request,
@@ -44,7 +50,7 @@ export function requireAuth(
   try {
     const userId = verifyToken(token);
 
-    req.user = {
+    (req as AuthenticatedRequest).user = {
       userId,
     };
 

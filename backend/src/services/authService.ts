@@ -1,5 +1,6 @@
 import { User } from "../models/User.js";
 import { hashPassword } from "../utils/password.js";
+import { generateToken } from "../utils/jwt.js";
 
 export interface SignupInput {
   name: string;
@@ -35,9 +36,15 @@ export async function signup(input: SignupInput) {
     passwordHash,
   });
 
+  const userId = user._id.toString();
+  const token = generateToken(userId);
+
   return {
-    id: user._id.toString(),
-    name: user.name,
-    email: user.email,
+    user: {
+      id: userId,
+      name: user.name,
+      email: user.email,
+    },
+    token,
   };
 }

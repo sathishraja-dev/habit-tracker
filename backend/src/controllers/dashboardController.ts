@@ -1,18 +1,17 @@
 import type { Request, Response } from "express";
+import type { AuthenticatedRequest } from "../middleware/authMiddleware.js";
 import { getDashboard } from "../services/dashboardServices.js";
 
 /**
  * Handles requests for the authenticated user's dashboard.
  *
- * The user ID comes from the verified JWT attached to the request by the
- * authentication middleware. The controller delegates dashboard calculations
- * to the service and maps service results to HTTP responses.
+ * The user ID comes from the verified JWT rather than from a URL parameter.
  */
 export async function getDashboardController(
   req: Request,
   res: Response,
 ): Promise<void> {
-  const userId = req.user!.userId;
+  const userId = (req as AuthenticatedRequest).user.userId;
 
   try {
     const dashboard = await getDashboard(userId);
@@ -20,7 +19,9 @@ export async function getDashboardController(
     if (!dashboard) {
       res.status(404).json({
         success: false,
-        error: "User not found",
+        error: {
+          message: "User not found",
+        },
       });
 
       return;
@@ -35,7 +36,9 @@ export async function getDashboardController(
 
     res.status(500).json({
       success: false,
-      error: "Failed to load dashboard",
+      error: {
+        message: "Failed to load dashboard",
+      },
     });
   }
 }

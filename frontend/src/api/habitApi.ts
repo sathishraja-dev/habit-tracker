@@ -9,7 +9,7 @@ export interface CreateHabitLogRequest {
 
 export interface CreateHabitLogResponse {
   success: boolean;
-  data?: {
+  log?: {
     id: string;
     habitType: HabitType;
     date: string;
@@ -21,7 +21,7 @@ export interface CreateHabitLogResponse {
 /**
  * Sends a habit log for the authenticated user.
  *
- * User identity is established by the JWT rather than request-body data.
+ * The backend gets the user ID from the JWT.
  */
 export async function createHabitLog(
   token: string,

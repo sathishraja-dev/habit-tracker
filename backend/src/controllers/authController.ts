@@ -29,13 +29,11 @@ export async function signupController(
   }
 
   try {
-    const user = await signup(validationResult.data);
+    const result = await signup(validationResult.data);
 
     res.status(201).json({
       success: true,
-      data: {
-        user,
-      },
+      data: result,
     });
   } catch (error) {
     if (error instanceof Error && error.message === "EMAIL_ALREADY_EXISTS") {

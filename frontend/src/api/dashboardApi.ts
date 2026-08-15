@@ -5,8 +5,9 @@ const API_BASE_URL = "http://localhost:3000";
 /**
  * Fetches the authenticated user's dashboard.
  *
- * The backend identifies the user from the JWT rather than from a
- * client-supplied user ID.
+ * The JWT is sent in the Authorization header. The backend extracts
+ * the user ID from the verified token, so the frontend does not
+ * send a user ID.
  */
 export async function fetchDashboard(
   token: string,
